@@ -10,4 +10,9 @@ import java.util.List;
  */
 public interface ResourceCategoryService {
     public List<ResourceCategory> findAllResourceCategory();
+
+    //添加&修改资源分类
+    public void saveResourceCategory(ResourceCategory resourceCategory);
+
+    public void updateResourceCategory(ResourceCategory resourceCategory);
 }

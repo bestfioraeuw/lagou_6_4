@@ -22,4 +22,14 @@ public class ResourceCategoryServiceImpl implements ResourceCategoryService {
     public List<ResourceCategory> findAllResourceCategory() {
         return resourceCategoryMapper.findAllResourceCategory();
     }
+
+    @Override
+    public void saveResourceCategory(ResourceCategory resourceCategory) {
+
+    }
+
+    @Override
+    public void updateResourceCategory(ResourceCategory resourceCategory) {
+
+    }
 }

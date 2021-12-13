@@ -17,7 +17,9 @@ public class ResourceCategoryController {
 
     @Autowired
     private ResourceCategoryService resourceCategoryService;
-
+    /*
+    资源分类信息查询
+     */
     @RequestMapping("/findAllResourceCategory")
     public ResponseResult findAllResourceCategory(){
 
