@@ -2,11 +2,7 @@ package com.lagou.domain;
 
 import java.util.Date;
 
-/**
- * @author Huw_Lin
- * time: 2021-12-14 01:59
- */
-public class RoleResourceRelation {
+public class Role_resource_relation {
     private Integer id;
     private Integer resourceId;
     private Integer roleId;
@@ -73,7 +69,7 @@ public class RoleResourceRelation {
 
     @Override
     public String toString() {
-        return "RoleResourceRelation{" +
+        return "Role_resource_relation{" +
                 "id=" + id +
                 ", resourceId=" + resourceId +
                 ", roleId=" + roleId +

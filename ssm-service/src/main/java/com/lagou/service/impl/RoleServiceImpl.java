@@ -56,67 +56,59 @@ public class RoleServiceImpl implements RoleService {
         roleMapper.deleteRole(roleid);
     }
 
-    /**
-     * 查询当前角色拥有的资源分类信息的Id
-     */
-    public List<Integer> findResourceCategoryByRoleId(Integer roleId) {
-        return roleMapper.findResourceCategoryByRoleId(roleId);
-    }
 
 
 
-    /**
-     * 查询当前角色拥有的资源分类下的所有资源信息
-     */
-    public List<Resource> findResourceByResourceCategoryId(ResourceCategoryVO resourceCategoryVO) {
-        return roleMapper.findResourceByResourceCategoryId(resourceCategoryVO.getId());
-    }
-
-    /**
-     * 根据资源分类id查找资源分类的信息
-     */
-    public ResourceCategory findResourceCategoryById(int id) {
-        return roleMapper.findResourceCategoryById(id);
-    }
-
-    /**
-     * 根据角色ID查询对应的资源信息
+    /*
+        获取当前角色拥有的资源信息
      */
     @Override
-    public List<Integer> findResourceByRoleId(Integer roleId) {
-        return roleMapper.findResourceByRoleId(roleId);
+    public List<ResourceCategory> findResourceListByRoleId(Integer roleId) {
+
+        //1.获取当前角色拥有的资源分类信息
+        List<ResourceCategory> categoryList = roleMapper.findResourceCategoryByRoleId(roleId);
+
+        //2.获取当前角色拥有的资源信息
+        List<Resource> resourceList = roleMapper.findResourceByRoleId(roleId);
+
+        //3.将资源信息封装到对应的资源分类下
+        for (ResourceCategory resourceCategory : categoryList) {
+            for (Resource resource : resourceList) {
+                //判断
+                if (resourceCategory.getId() == resource.getCategoryId()) {
+                    resourceCategory.getResourceList().add(resource);
+                }
+            }
+        }
+
+        //4.返回资源分类集合
+        return categoryList;
     }
 
-
-    /**
-     * 根据roleid 清空 角色与资源 的关联关系
+    /*
+        为角色分配资源
      */
     @Override
-    public void deleteRoleContextResource(Integer roleId) {
-        roleMapper.deleteRoleContextResource(roleId);
-    }
+    public void roleContextResource(RoleResourceVO roleResourceVO) {
+        //删除该角色关联的资源信息
+        roleMapper.deleteRoleContextResource(roleResourceVO.getRoleId());
 
-    /**
-     * 为角色分配资源信息
-     */
-    @Override
-    public void roleContextResource(RoleResourceVo roleResourceVo) {
-        //删除之前角色所关联的资源信息
-        roleMapper.deleteRoleContextResource(roleResourceVo.getRoleId());
-        //根据资源ID为角色添加资源权限
-        List<Integer> resourceIdList = roleResourceVo.getResourceIdList();
-        for(Integer id : resourceIdList) {
-            RoleResourceRelation roleResourceRelation = new RoleResourceRelation();
-            roleResourceRelation.setRoleId(roleResourceVo.getRoleId());
-            roleResourceRelation.setResourceId(id);
+        List<Integer> resourceIdList = roleResourceVO.getResourceIdList();
+        for (Integer resourceId : resourceIdList) {
+            //为角色分配资源（向角色资源中间表插入数据）
+            //封装数据
+            Role_resource_relation role_resource_relation = new Role_resource_relation();
+            role_resource_relation.setResourceId(resourceId);
+            role_resource_relation.setRoleId(roleResourceVO.getRoleId());
             Date date = new Date();
-            roleResourceRelation.setUpdatedTime(date);
-            roleResourceRelation.setCreatedTime(date);
+            role_resource_relation.setCreatedTime(date);
+            role_resource_relation.setUpdatedTime(date);
+            role_resource_relation.setCreatedBy("system");
+            role_resource_relation.setUpdatedBy("system");
 
-            roleResourceRelation.setCreatedBy("system");
-            roleResourceRelation.setUpdatedBy("system");
-            roleMapper.roleContextResource(roleResourceRelation);
-
+            //调用mapper中的roleContextResource方法
+            roleMapper.roleContextResource(role_resource_relation);
         }
     }
+
 }

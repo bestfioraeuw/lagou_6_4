@@ -2,11 +2,8 @@ package com.lagou.domain;
 
 import java.util.List;
 
-/**
- * @author Huw_Lin
- * time: 2021-12-14 02:07
- */
-public class RoleResourceVo {
+public class RoleResourceVO {
+
     private Integer roleId;
     private List<Integer> resourceIdList;
 

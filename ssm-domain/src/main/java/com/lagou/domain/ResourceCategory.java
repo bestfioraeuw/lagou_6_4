@@ -1,5 +1,6 @@
 package com.lagou.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ResourceCategory {
     private String createdBy;
     private String updatedBy;
     //一对多关系 资源集合
-    private List<Resource> resourceList;
+    private List<Resource> resourceList = new ArrayList<>();;
 
     public List<Resource> getResourceList() {
         return resourceList;
