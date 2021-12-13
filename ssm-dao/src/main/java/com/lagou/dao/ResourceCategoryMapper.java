@@ -16,4 +16,7 @@ public interface ResourceCategoryMapper {
     public void saveResourceCategory(ResourceCategory resourceCategory);
 
     public void updateResourceCategory(ResourceCategory resourceCategory);
+
+    //删除deleteResourceCategory
+    public void deleteResourceCategory(int id);
 }

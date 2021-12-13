@@ -1,7 +1,6 @@
 package com.lagou.dao;
 
-import com.lagou.domain.Role;
-import com.lagou.domain.Role_menu_relation;
+import com.lagou.domain.*;
 
 import java.util.List;
 
@@ -24,4 +23,23 @@ public interface RoleMapper {
 
     //删除角色
     public void deleteRole (int roleid);
+
+
+    //查询当前角色拥有的资源分类信息Id
+    public List<Integer> findResourceCategoryByRoleId(Integer roleId);
+
+    //* 查询当前角色拥有的资源分类下的资源信息
+    public List<Resource> findResourceByResourceCategoryId(int resourceCategoryId);
+
+    //根据资源分类id查找资源分类的信息
+    public ResourceCategory findResourceCategoryById(int id);
+
+    //根据角色ID查询对应的资源信息
+    public List<Integer> findResourceByRoleId(Integer roleId);
+
+    //根据roleid 清空 角色与资源 的关联关系
+    public void deleteRoleContextResource(Integer roleId);
+
+    //为角色分配资源信息
+    public void roleContextResource(RoleResourceRelation resourceRelation);
 }

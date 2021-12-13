@@ -28,7 +28,7 @@ public class MenuController {
     }
 
 
-    @RequestMapping("/")
+    @RequestMapping("/findMenuInfoById")
     public ResponseResult findMenuInfoById(int id){
         if (id == -1){
             List<Menu> list = menuService.findSubMenuListByPid(-1);

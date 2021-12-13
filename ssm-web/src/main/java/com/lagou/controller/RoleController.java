@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,5 +72,38 @@ public class RoleController {
         roleService.deleteRole(id);
 
         return  new ResponseResult(true,200,"响应成功",null);
+    }
+
+    //     - 名称: **findResourceListByRoleId**
+//            - 描述: 添加& 修改资源分类接口
+//- URL: http://localhost:8080/ssm_web/role/findResourceListByRoleId
+//            - 请求方式: GET
+    @RequestMapping("/findResourceListByRoleId")
+    public ResponseResult findResourceListByRoleId(int roleId) {
+        ResourceCategoryVO resourceCategoryVO = new ResourceCategoryVO();
+        //根据角色ID查询出来的所具有的资源分类的Id
+        List<Integer> resourceCategoryByRoleId = roleService.findResourceCategoryByRoleId(roleId);
+        List<ResourceCategory> list = new ArrayList<>();
+        for(Integer id : resourceCategoryByRoleId) {
+            ResourceCategory resourceCategory = roleService.findResourceCategoryById(id);
+            resourceCategoryVO.setId(id);
+            resourceCategoryVO.setList(roleService.findResourceByRoleId(roleId));
+            List<Resource> resourceList = roleService.findResourceByResourceCategoryId(resourceCategoryVO);
+            resourceCategory.setResourceList(resourceList);
+            list.add(resourceCategory);
+        }
+        return new ResponseResult(true,200,"获取当前角色拥有的资源信息成功",list);
+    }
+    /**
+     * 为角色分配资源
+     * @return
+     */
+
+    @RequestMapping("/roleContextResource")
+    public ResponseResult findResourceListByRoleId(@RequestBody RoleResourceVo roleResourceVo) {
+
+        roleService.roleContextResource(roleResourceVo);
+        return new ResponseResult(true,200,"为角色分配资源成功",null);
+
     }
 }

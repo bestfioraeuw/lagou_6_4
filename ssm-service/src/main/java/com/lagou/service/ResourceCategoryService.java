@@ -15,4 +15,6 @@ public interface ResourceCategoryService {
     public void saveResourceCategory(ResourceCategory resourceCategory);
 
     public void updateResourceCategory(ResourceCategory resourceCategory);
+    //delete
+    public void deleteResourceCategory(int id);
 }

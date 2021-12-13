@@ -35,4 +35,46 @@
     <delete id="deleteRole" parameterType="int">
         delete from roles where id = #{roleid}
     </delete>
+
+
+
+<!--  更新部分-->
+    <!-- 查询当前角色拥有的资源分类信息Id public List<Integer> findResourceCategoryByRoleId(Integer roleId);-->
+    <select id="findResourceCategoryByRoleId" parameterType="int" resultType="int">
+        select  distinct category_id from resource where id in (
+            select resource_id from role_resource_relation where role_id = #{roleId})
+    </select>
+
+
+    <!--     * 查询当前角色拥有的资源分类下的资源信息    public List<Resource> findResourceByResourceCategoryId(int resourceCategoryId) -->
+    <select id = "findResourceByResourceCategoryId" resultType="com.lagou.domain.Resource"  parameterType="com.lagou.domain.ResourceCategoryVO">
+        select distinct r.* from resource r inner join role_resource_relation rr on r.id = rr.resource_id
+        where r.category_id = #{id} and r.id in
+        <foreach collection="list" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--     根据资源分类id查找资源分类的信息 public ResourceCategory findResourceCategoryById(int id);-->
+    <select id="findResourceCategoryById" resultType="com.lagou.domain.ResourceCategory" parameterType="int">
+        select * from resource_category where id = #{id}
+    </select>
+
+
+    <!--     根据角色ID查询对应的资源信息 public List<Integer> findResourceByRoleId(Integer roleId);-->
+    <select id="findResourceByRoleId" parameterType="int" resultType="int">
+        SELECT resource_id FROM role_resource_relation WHERE  role_id = #{roleId}
+    </select>
+
+
+
+    <!--     根据roleid 清空 角色与资源 的关联关系 public void deleteRoleContextResource(Integer roleId);-->
+    <delete id="deleteRoleContextResource" parameterType="int">
+        delete from role_resource_relation where role_id = #{id}
+    </delete>
+
+    <!--     为角色分配资源信息 public void roleContextResource(RoleResourceRelation resourceRelation);-->
+    <insert id="roleContextResource" parameterType="com.lagou.domain.RoleResourceRelation">
+        insert into role_resource_relation values (null,#{resourceId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
+    </insert>
 </mapper>
